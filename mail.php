@@ -1,3 +1,6 @@
+<?php
+    session_start();
+?>
 <!DOCTYPE html>
 <html>
 <head>
@@ -5,34 +8,58 @@
 	<meta charset="utf-8">
 	  	 <meta name="viewport" content="width=device-width, target-densitydpi=device-dpi"/>
 	 	<link rel="stylesheet" href="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css">
-	 	<link rel="stylesheet" type="text/css" href="style.css">
 </head>
-<body>
-	<div class=''>
-	</div>
-	<?php 
-	echo "<h1>ceci est un teste php </h1>";
-	?>
-	 <div class="col-md-4">
-		<p>Veuillez vous identifier:</p>
-	    <form action="" method="post">
-	        <input type="email" name="email" placeholder=" votre email" id=" email"><br/>
-	        <input type="text" name="objet" placeholder="objet" ><br/>
+<body style="background-color: #E6E6E6; margin-top:40px">
+    <div class="container">
+        <div class="starter-template">
+            <!--si il y des errors-->
+            <?php if (array_key_exists('errors',$_SESSION)): ?>
+            <div class="alert-alert-danger">
+                <?=implode('<br>', $_SESSION['errors']); ?>
+            </div>
+            <?php endif;  ?>
 
-	        <p>Votre message:</p>
-	          <textarea name="message" cols="50" rows="6" id="txt" placeholder=" votre message"> </textarea><br/>
-	        <input type="submit" value="Envoyer">
-	    </form>
-	</div>
-	<?php 
-		if (isset($_POST) && !empty($_POST["email"]) && !empty($_POST["objet"]) && !empty($_POST["message"])) {
+            <!--   Si le email a été envoyé   -->
 
-			extract($_POST);
-			$destinataire="rasho80@hotmail.com";
-			$expediteur="$email";
-			$mail=mail($destinataire,$objet,$message,$expediteur);
-				if ($mail) echo "<h3>mail envoyé avec succé</h3>"; else echo "<h3>echec d'envoie</h3>";
-		} else echo "<h3>formaulaire non sumis ou des champs sont vides</h3>";
-	?>
+            <?php if (array_key_exists('success',$_SESSION)): ?>
+            <div class="alert-alert-success">
+                votre email a été bien envoyé
+            </div>
+            <?php endif;  ?>
+
+            <form action="post_contact.php" methode="POST">
+                 <div class="row">
+                    <div class="col-xs-4">
+                        <div class="form-group">
+                            <label for="inputname"> votre nom</label>
+                            <input type="text" name="name" class="form-control" id="inputname" value="<?=isset($_SESSION['inputs']['name'])? $_SESSION['inputs']['name']:''; ?>">
+                        </div>
+                    </div>
+                    <div class="col-xs-4">
+                        <div class="form-group">
+                            <label for="inputemail"> votre email</label>
+                            <input type="email" name="email" class="form-control" id="inputemail" value="<?=isset($_SESSION['inputs']['email'])? $_SESSION['inputs']['email']:''; ?>">
+                        </div>
+                    </div>
+                    <div class=col-xs-6>
+                        <div class="form-group">
+                            <label for="inputmessage"> votre message</label>
+                            <textarea name="message" id="inputmessage" maxlength="500" class="form-control" > <?=isset($_SESSION['inputs']['message'])? $_SESSION['inputs']['message']:''; ?></textarea><br/>            
+                        </div>
+                            <button class="btn btn-primary btn-md" type="submit"> Envoyer</button>
+                    </div>
+                </div>
+            </form>
+            <h3>Debug:</h3>
+            <?= var_dump($_SESSION);?>
+        </div>
+    </div>
+    <?php 
+        unset($_SESSION['inputs']);
+        unset($_SESSION['success']);
+        unset($_SESSION['errors']);
+        
+    ?>
+
 </body>
 </html>
