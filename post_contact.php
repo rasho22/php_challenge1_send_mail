@@ -25,8 +25,8 @@
 	{
 		$_SESSION['success']=1;
 		$message=$_POST['message'];
-		$headers='FROM:ab_rasho@yahoo.fr';
-		mail('ab_rasho@yahoo.fr', 'formaulaire contact', $message,$headers);
+		$headers='FROM:abdulrahman.rasho@gmail.com';
+		mail('abdulrahman.rasho@gmail.com', 'formaulaire contact', $message,$headers);
 		header('Location:mail.php');
 
 	}
